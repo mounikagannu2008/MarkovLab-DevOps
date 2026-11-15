@@ -9,12 +9,12 @@ pipeline {
             }
         }
 
-        stage('Python Tests') {
-            steps {
-                bat 'python -m pip install -r engine/requirements.txt'
-                bat 'python -m pytest engine -q'
-            }
-        }
+    stage('Python Tests') {
+     steps {
+         bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pip install -r engine/requirements.txt'
+         bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest engine -q'
+       }
+     }
 
         stage('Java Maven Build') {
             steps {
