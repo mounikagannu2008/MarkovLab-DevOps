@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: markov-engine }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: markov-engine } }
+  template:
+    metadata: { labels: { app: markov-engine } }
+    spec:
+      containers:
+      - name: engine
+        image: IMAGE_REGISTRY/markov-engine:IMAGE_TAG
+        ports: [{ containerPort: 8000 }]
+        readinessProbe: { httpGet: { path: /health, port: 8000 }, initialDelaySeconds: 3, periodSeconds: 5 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: markov-api }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: markov-api } }
+  template:
+    metadata: { labels: { app: markov-api } }
+    spec:
+      containers:
+      - name: api
+        image: IMAGE_REGISTRY/markov-api:IMAGE_TAG
+        ports: [{ containerPort: 8080 }]
+        env: [{ name: ENGINE_URL, value: "http://markov-engine:8000" }]
+        readinessProbe: { httpGet: { path: /health, port: 8080 }, initialDelaySeconds: 10, periodSeconds: 5 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: markov-ui }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: markov-ui } }
+  template:
+    metadata: { labels: { app: markov-ui } }
+    spec:
+      containers:
+      - name: ui
+        image: IMAGE_REGISTRY/markov-ui:IMAGE_TAG
+        ports: [{ containerPort: 8501 }]
+        env: [{ name: API_URL, value: "http://markov-api:8080" }]
+        readinessProbe: { httpGet: { path: /_stcore/health, port: 8501 }, initialDelaySeconds: 10, periodSeconds: 5 }
