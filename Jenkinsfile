@@ -24,18 +24,19 @@ pipeline {
             }
         }
 
-        stage('Docker Build') {
-            steps {
-                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
-            }
-        }
 
-        stage('Docker Run') {
-            steps {
-                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
-            }
-        }
+       stage('Docker Build') {
+             steps {
+        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin              \\docker-compose.exe" build'
     }
+}
+
+       stage('Docker Run') {
+              steps {
+        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" up -d'
+    }
+}
+
 
     post {
         success {
