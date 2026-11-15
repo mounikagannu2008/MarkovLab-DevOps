@@ -3,7 +3,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -13,7 +12,6 @@ pipeline {
         stage('Python Tests') {
             steps {
                 bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pip install -r engine/requirements.txt'
-
                 bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest engine -q'
             }
         }
@@ -24,19 +22,18 @@ pipeline {
             }
         }
 
+        stage('Docker Build') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" build'
+            }
+        }
 
-       stage('Docker Build') {
-             steps {
-        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin              \\docker-compose.exe" build'
+        stage('Docker Run') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" up -d'
+            }
+        }
     }
-}
-
-       stage('Docker Run') {
-              steps {
-        bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker-compose.exe" up -d'
-    }
-}
-
 
     post {
         success {
