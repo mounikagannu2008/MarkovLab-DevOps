@@ -11,33 +11,36 @@ pipeline {
 
         stage('Python Tests') {
             steps {
-                sh '''
-                    cd engine
-                    python3 -m pip install -r requirements.txt
-                    python3 -m pytest -q
-                '''
+                bat 'python -m pip install -r engine/requirements.txt'
+                bat 'python -m pytest engine -q'
             }
         }
 
-        stage('Java Build') {
+        stage('Java Maven Build') {
             steps {
-                sh 'cd api && mvn -B clean package'
+                bat 'cd api && mvn -B clean package'
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker compose build'
+                bat 'docker compose build'
+            }
+        }
+
+        stage('Docker Run') {
+            steps {
+                bat 'docker compose up -d'
             }
         }
     }
 
     post {
         success {
-            echo 'MarkovLab CI Pipeline completed successfully!'
+            echo 'MARKOVLAB PIPELINE SUCCESS'
         }
         failure {
-            echo 'Pipeline failed. Check the failed stage.'
+            echo 'PIPELINE FAILED - CHECK CONSOLE'
         }
     }
 }
