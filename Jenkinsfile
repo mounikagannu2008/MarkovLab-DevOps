@@ -3,18 +3,20 @@ pipeline {
     agent any
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-    stage('Python Tests') {
-     steps {
-         bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pip install -r engine/requirements.txt'
-         bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest engine -q'
-       }
-     }
+        stage('Python Tests') {
+            steps {
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pip install -r engine/requirements.txt'
+
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\Python\\Python313\\python.exe" -m pytest engine -q'
+            }
+        }
 
         stage('Java Maven Build') {
             steps {
@@ -24,13 +26,13 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat 'docker compose build'
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose build'
             }
         }
 
         stage('Docker Run') {
             steps {
-                bat 'docker compose up -d'
+                bat '"C:\\Users\\DELL\\AppData\\Local\\Programs\\DockerDesktop\\resources\\bin\\docker.exe" compose up -d'
             }
         }
     }
